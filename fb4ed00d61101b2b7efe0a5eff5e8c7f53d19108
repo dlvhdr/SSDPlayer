@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa7fdbe_d8cadc6d",
+        "filename": "src/breakpoints/BreakpointFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1007072
+      },
+      "writtenOn": "2015-12-25T17:23:38Z",
+      "side": 1,
+      "message": "Geregory is proud of you :)",
+      "range": {
+        "startLine": 7,
+        "startChar": 31,
+        "endLine": 7,
+        "endChar": 32
+      },
+      "revId": "fb4ed00d61101b2b7efe0a5eff5e8c7f53d19108",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
