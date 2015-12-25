@@ -144,6 +144,8 @@ public class TracePlayer extends JPanel {
 	public void setInitialBreakpoints(List<IBreakpoint> initialBreakpoints) {
 		breakpoints = new ArrayList<IBreakpoint>();
 		breakpoints.addAll(initialBreakpoints);
+		breakpointsDialog = new ManageBreakpointsDialog(SwingUtilities.windowForComponent(this));
+		breakpointsDialog.addBreakpoints(breakpoints);
 	}
 	
 	private void initManagerSelection() {
@@ -433,7 +435,6 @@ public class TracePlayer extends JPanel {
     }
 	
 	private void showBreakpointsDialog() {
-		breakpointsDialog = new ManageBreakpointsDialog(SwingUtilities.windowForComponent(this));
 		breakpointsDialog.setVisible(true);
 	}
 }
