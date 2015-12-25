@@ -104,7 +104,7 @@ public class TracePlayer extends JPanel {
 
 	private Device<?,?,?,?> currentDevice;
 	
-	private List<IBreakpoint> breakpoints = new ArrayList<IBreakpoint>();
+	private List<IBreakpoint> breakpoints;
 	private ManageBreakpointsDialog breakpointsDialog;
 	
     public TracePlayer(VisualConfig visualConfig, TwoObjectsCallback<Device<?, ?, ?, ?>, Iterable<StatisticsGetter>> resetDevice, OneObjectCallback<Device<?,?,?,?>> updateDevice) {
@@ -139,6 +139,11 @@ public class TracePlayer extends JPanel {
 //			stopLabel.setText("0");
 //			setProgressBarFrame(0);
 		}
+	}
+	
+	public void setInitialBreakpoints(List<IBreakpoint> initialBreakpoints) {
+		breakpoints = new ArrayList<IBreakpoint>();
+		breakpoints.addAll(initialBreakpoints);
 	}
 	
 	private void initManagerSelection() {
