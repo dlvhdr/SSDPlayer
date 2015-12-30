@@ -1,33 +1,29 @@
 package breakpoints;
 
+import manager.SSDManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import entities.BlockStatus;
 import entities.BlockStatusGeneral;
 import entities.Device;
-import general.ConfigProperties;
 
 public class AllocateActiveBlockBreakpoint implements IBreakpoint {
 	private int mBlockIndex;
+	private SSDManager<?, ?, ?, ?, ?> mManager;
 	
 	public AllocateActiveBlockBreakpoint() {}
 	
 	@Override
 	public boolean breakpointHit(Device<?, ?, ?, ?> previousDevice, Device<?, ?, ?, ?> currentDevice) {
-		int blocksInChip = ConfigProperties.getPlanesInChip() * ConfigProperties.getBlocksInPlane();
-		int chipIndex = mBlockIndex / blocksInChip;
-		int blockRelativeToChipIndex = mBlockIndex - chipIndex * blocksInChip;
-		int planeIndex = blockRelativeToChipIndex / ConfigProperties.getBlocksInPlane();
-		int blockIndex = blockRelativeToChipIndex - planeIndex * ConfigProperties.getBlocksInPlane();
-		
-		BlockStatus currStatus = currentDevice.getChip(chipIndex).getPlane(planeIndex).getBlock(blockIndex).getStatus();
+		BlockStatus currStatus = currentDevice.getBlockByIndex(mBlockIndex).getStatus();
 		if (previousDevice == null) {
 			if (isBlockActive(currStatus)) return true;
 			return false;
 		}
 		
-		BlockStatus prevStatus = previousDevice.getChip(chipIndex).getPlane(planeIndex).getBlock(blockIndex).getStatus();
+		BlockStatus prevStatus = previousDevice.getBlockByIndex(mBlockIndex).getStatus();
 		if (!isBlockActive(prevStatus) && isBlockActive(currStatus)) return true;
 		
 		return false;
@@ -45,5 +41,10 @@ public class AllocateActiveBlockBreakpoint implements IBreakpoint {
 	
 	private boolean isBlockActive(BlockStatus prevStatus) {
 		return prevStatus.getStatusName().equals(BlockStatusGeneral.ACTIVE.getStatusName());
+	}
+
+	@Override
+	public void setManager(SSDManager<?, ?, ?, ?, ?> manager) {
+		mManager = manager;
 	}
 }
