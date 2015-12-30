@@ -1,7 +1,7 @@
 package breakpoints;
 
+import manager.LogicalWritesPerEraseGetter;
 import manager.SSDManager;
-import manager.WriteAmplificationGetter;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -9,16 +9,15 @@ import org.w3c.dom.NodeList;
 import entities.Device;
 import entities.StatisticsGetter;
 
-public class WriteAmplificationBreakpoint implements IBreakpoint {
-
+public class WritesPerEraseBreakpoint implements IBreakpoint {
 	private SSDManager<?, ?, ?, ?, ?> mManager;
 	private double mValue;
-
+	
 	@Override
 	public boolean breakpointHit(Device<?, ?, ?, ?> previousDevice,
 			Device<?, ?, ?, ?> currentDevice) {
 		for(StatisticsGetter getter : mManager.getStatisticsGetters()){
-			if(WriteAmplificationGetter.class.isInstance(getter)){
+			if(LogicalWritesPerEraseGetter.class.isInstance(getter)){
 				double oldValue = previousDevice == null ? Double.MIN_VALUE : getter.getStatistics(previousDevice).get(0).getValue();
 				double currentValue = getter.getStatistics(currentDevice).get(0).getValue();
 				return oldValue < mValue && currentValue >= mValue;
@@ -35,7 +34,6 @@ public class WriteAmplificationBreakpoint implements IBreakpoint {
 		}
 		
 		this.mValue = Float.parseFloat(physicalPageNodes.item(0).getTextContent());
-
 	}
 
 	@Override
