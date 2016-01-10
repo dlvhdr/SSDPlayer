@@ -30,6 +30,7 @@ public class BreakpointFactory {
 		register(PagesWritenInPlane.class);
 		register(HotColdPartitionHoldsPrecentOfPages.class);
 		register(ReusableLevelPagesPrecent.class);
+		register(ReusableBlockRecycled.class);
 	}
 	
 	public static IBreakpoint getBreakpoint(String type, Element breakpointElement) throws Exception {
