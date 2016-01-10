@@ -1,7 +1,7 @@
 <root>
 	<breakpoints>
-		<breakpoint type="WriteLpBreakpoint">
-			<lp>56</lp>
+		<breakpoint type="WritePpBreakpoint">
+			<physicalPage>56</physicalPage>
 		</breakpoint>
 		<breakpoint type="AllocateActiveBlockBreakpoint">
 			<blockIndex>110</blockIndex>
