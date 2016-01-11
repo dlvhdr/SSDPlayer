@@ -13,11 +13,13 @@ public class EraseBlockBreakpoint extends BreakpointBase {
 	public boolean breakpointHit(Device<?, ?, ?, ?> previousDevice,
 			Device<?, ?, ?, ?> currentDevice) {
 		if(previousDevice == null){
+			mIsHit = false;
 			return false;
 		}
 		int previousBlockEraseCount = previousDevice.getBlockByIndex(mBlockIndex).getEraseCounter();
 		int currentBlockEraseCount = currentDevice.getBlockByIndex(mBlockIndex).getEraseCounter();
-		return previousBlockEraseCount < currentBlockEraseCount;
+		mIsHit = previousBlockEraseCount < currentBlockEraseCount;
+		return mIsHit;
 	}
 
 	public int getBlockIndex() {

@@ -21,10 +21,12 @@ public class WriteLpBreakpoint extends BreakpointBase {
 		List<IDeviceAction> writeActions = log.getActionsByType(WriteLpAction.class);
 		for(IDeviceAction action : writeActions){
 			if(((WriteLpAction)action).get_lp() == lp){
+				mIsHit = true;
 				return true;
 			}
 		}
 		
+		mIsHit = false;
 		return false;
 	}
 

@@ -14,11 +14,13 @@ public class WritePpBreakpoint extends BreakpointBase {
 			Device<?, ?, ?, ?> currentDevice) {
 		boolean currentPageIsClean = currentDevice.getPageByIndex(mPhysicalPage).isClean();
 		if(previousDevice == null){
-			return !currentPageIsClean;
+			mIsHit = !currentPageIsClean;
+			return mIsHit;
 		}
 		
 		boolean previousPageIsclean = previousDevice.getPageByIndex(mPhysicalPage).isClean();
-		return previousPageIsclean && !currentPageIsClean;
+		mIsHit = previousPageIsclean && !currentPageIsClean;
+		return mIsHit;
 	}
 
 	public int getPhysicalPage() {

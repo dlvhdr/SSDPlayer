@@ -150,7 +150,9 @@ public class DefineBreakpointDialog  extends JDialog implements ActionListener {
 					if (mSelectedEntry instanceof BreakpointsGroup) {
 						displayGroupRadioButtons();
 					} else {
-						mBreakpoint = ((SingleBreakpoint) mSelectedEntry).getBPClass().newInstance();
+						if (!mIsEdit) {
+							mBreakpoint = ((SingleBreakpoint) mSelectedEntry).getBPClass().newInstance();
+						}
 						mRadioButtonsPanel.removeAll();
 						mRadioButtonsPanel.revalidate();
 						

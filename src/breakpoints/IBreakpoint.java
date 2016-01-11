@@ -9,6 +9,8 @@ import entities.Device;
 public interface IBreakpoint {
 	public boolean breakpointHit(Device<?, ?, ?, ?> previousDevice, Device<?, ?, ?, ?> currentDevice);
 	
+	public boolean isHit();
+
 	public void readXml(Element xmlElement) throws Exception;
 	
 	public String getDisplayName();

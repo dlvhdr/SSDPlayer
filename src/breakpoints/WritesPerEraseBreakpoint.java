@@ -15,9 +15,12 @@ public class WritesPerEraseBreakpoint extends BreakpointBase {
 			if(LogicalWritesPerEraseGetter.class.isInstance(getter)){
 				double oldValue = previousDevice == null ? Double.MIN_VALUE : getter.getStatistics(previousDevice).get(0).getValue();
 				double currentValue = getter.getStatistics(currentDevice).get(0).getValue();
-				return oldValue < mValue && currentValue >= mValue;
+				mIsHit = oldValue < mValue && currentValue >= mValue;
+				return mIsHit;
 			}
 		}
+		
+		mIsHit = false;
 		return false;
 	}
 

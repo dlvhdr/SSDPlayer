@@ -15,13 +15,22 @@ public class AllocateActiveBlockBreakpoint extends BreakpointBase {
 	public boolean breakpointHit(Device<?, ?, ?, ?> previousDevice, Device<?, ?, ?, ?> currentDevice) {
 		BlockStatus currStatus = currentDevice.getBlockByIndex(mBlockIndex).getStatus();
 		if (previousDevice == null) {
-			if (isBlockActive(currStatus)) return true;
+			if (isBlockActive(currStatus)) {
+				mIsHit = true;
+				return true;
+			}
+			
+			mIsHit = false;
 			return false;
 		}
 		
 		BlockStatus prevStatus = previousDevice.getBlockByIndex(mBlockIndex).getStatus();
-		if (!isBlockActive(prevStatus) && isBlockActive(currStatus)) return true;
+		if (!isBlockActive(prevStatus) && isBlockActive(currStatus)) {
+			mIsHit = true;
+			return true;
+		}
 		
+		mIsHit = false;
 		return false;
 	}
 
