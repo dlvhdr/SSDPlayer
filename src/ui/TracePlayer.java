@@ -1,6 +1,6 @@
 /*******************************************************************************
  * SSDPlayer Visualization Platform (Version 1.0)
- * Authors: Roman Shor, Gala Yadgar, Eitan Yaakobi, Assaf Schuster
+ * Authors: Or Mauda, Roman Shor, Gala Yadgar, Eitan Yaakobi, Assaf Schuster
  * Copyright (c) 2015, Technion – Israel Institute of Technology
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided that
@@ -54,9 +54,11 @@ import breakpoints.BreakpointBase;
 import breakpoints.IBreakpoint;
 import entities.Device;
 import entities.StatisticsGetter;
+import entities.RAID.RAIDBasicPage;
 import general.Consts;
 import general.OneObjectCallback;
 import general.TwoObjectsCallback;
+import manager.RAIDBasicSSDManager;
 import manager.SSDManager;
 import manager.TraceParser;
 import manager.TraceParserGeneral;
@@ -65,6 +67,11 @@ import manager.WorkloadGenerator;
 import ui.breakpoints.ManageBreakpointsDialog;
 import utils.Utils;
 
+/**
+ * 
+ *  November 2015: revised by Or Mauda for additional RAID functionality.
+ *
+ */
 public class TracePlayer extends JPanel {
 	private static final long serialVersionUID = 1L;
 
@@ -77,6 +84,7 @@ public class TracePlayer extends JPanel {
 	private JButton openButton = new JButton(new ImageIcon(getClass().getResource("/ui/images/eject.png")));
 	private JButton generateButton = new JButton(new ImageIcon(getClass().getResource("/ui/images/generate.png")));
 	private JButton breakpointsButton = new JButton("Breakpoints");
+	private JButton showStripeButton = new JButton(new ImageIcon(getClass().getResource("/ui/images/showStripe.png")));
 	
 	private JProgressBar progressBar;
 	private TraceParser<?,?> parser;
@@ -99,6 +107,8 @@ public class TracePlayer extends JPanel {
 	private static SSDManager<?,?,?,?,?> manager;
 
 	private LoadGeneratorsCreatorsFrame creatorsFrame;
+	
+	private StripesInfoFrame stripesFrame;
 	
 	private OneObjectCallback<Device<?, ?, ?, ?>> updateDevice;
 
@@ -132,14 +142,16 @@ public class TracePlayer extends JPanel {
 			playPauseButton.setIcon(iconPlay);
 			stopButton.setEnabled(false);
 			nextButton.setEnabled(false);
+			showStripeButton.setEnabled(false);
 			openButton.setEnabled(true);
 			generateButton.setEnabled(true);
 			managersList.setEnabled(true);
 			currFrameCounter = 0;
 			fileName = "";
-//			numberOfLines = 0;
-//			stopLabel.setText("0");
-//			setProgressBarFrame(0);
+			if (stripesFrame != null) {
+				StripesInfoFrame.reset(stripesFrame);
+				RAIDBasicPage.resetHighlights();
+			}
 		}
 	}
 	
@@ -193,6 +205,7 @@ public class TracePlayer extends JPanel {
 		traceChooser.setFileFilter(new FileNameExtensionFilter(manager.getManagerName() + " Trace Files", 
 				traseParser.getFileExtensions()));
 		setWorkloadGenerators(manager);
+		setStripeInformation(manager);
 		resetDevice.message(traseParser.getCurrentDevice(), manager.getStatisticsGetters());
 	}
 
@@ -203,6 +216,19 @@ public class TracePlayer extends JPanel {
 		} catch (Exception e) {
 			creatorsFrame = null;
 			generateButton.setVisible(false);
+		}
+	}
+	
+	private void setStripeInformation(SSDManager<?, ?, ?, ?, ?> manager) {
+		if (stripesFrame != null) {
+			StripesInfoFrame.reset(stripesFrame);
+			RAIDBasicPage.resetHighlights();
+		}
+		showStripeButton.setVisible(true);
+		showStripeButton.setEnabled(false);
+		if (!manager.hasStripes()) {
+			stripesFrame = null;
+			showStripeButton.setVisible(false);
 		}
 	}
 
@@ -260,6 +286,14 @@ public class TracePlayer extends JPanel {
 		addButton(breakpointsButton, ManageBreakpointsDialog.DIALOG_HEADER);
 		breakpointsButton.setEnabled(true);
 		
+		showStripeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				showStripesInfo();
+			}
+		});
+		addButton(showStripeButton, "Show Stripes Information");
+		
 		add(Box.createRigidArea(new Dimension(5,0)));
 	}
 
@@ -275,6 +309,10 @@ public class TracePlayer extends JPanel {
 				resetProgressBar(fileName);
 				parser.open(fileName);
 				reStartTimer();
+				if (stripesFrame != null) {
+					StripesInfoFrame.reset(stripesFrame);
+					RAIDBasicPage.resetHighlights();
+				}
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(null, "Error occured during file open. Check the choosen trace.");
 				e.printStackTrace();
@@ -357,6 +395,7 @@ public class TracePlayer extends JPanel {
 		playPauseButton.setEnabled(true);
 		stopButton.setEnabled(true);
 		nextButton.setEnabled(true);
+		showStripeButton.setEnabled(true);
 		openButton.setEnabled(false);
 		generateButton.setEnabled(false);
 		managersList.setEnabled(false);
@@ -426,6 +465,7 @@ public class TracePlayer extends JPanel {
 			isPaused = false;
 			playPauseButton.setIcon(iconPause);
 			playPauseButton.setToolTipText("Pause");
+			showStripeButton.setEnabled(false);
 		} else {
 			pauseTrace();
 		}
@@ -456,5 +496,10 @@ public class TracePlayer extends JPanel {
 		
 		breakpoints.clear();
 		breakpoints.addAll(breakpointsDialog.getBreakpoints());
+	}
+
+	private void showStripesInfo() {
+		stripesFrame = new StripesInfoFrame(SwingUtilities.windowForComponent(this), (RAIDBasicSSDManager<?, ?, ?, ?, ?>) manager, parser, updateDevice);
+		stripesFrame.setVisible(true);
 	}
 }
