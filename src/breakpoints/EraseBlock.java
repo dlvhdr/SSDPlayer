@@ -7,10 +7,10 @@ import org.w3c.dom.NodeList;
 
 import entities.Device;
 
-public class EraseBlockBreakpoint extends BreakpointBase {
+public class EraseBlock extends BreakpointBase {
 	private int mBlockIndex;
 	
-	public EraseBlockBreakpoint() {
+	public EraseBlock() {
 		super();
 	}
 	
