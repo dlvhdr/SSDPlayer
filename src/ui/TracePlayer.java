@@ -261,6 +261,7 @@ public class TracePlayer extends JPanel {
 		});
 		addButton(breakpointsButton, ManageBreakpointsDialog.DIALOG_HEADER);
 		breakpointsButton.setEnabled(true);
+		breakpointsButton.setBorder(BorderFactory.createLineBorder(Consts.Colors.ACTIVE));
 		
 		add(Box.createRigidArea(new Dimension(5,0)));
 	}
@@ -422,7 +423,12 @@ public class TracePlayer extends JPanel {
 		
 		triggeredBpView.updateTriggeredBreakpoints(breakpoints);
 		
-		if (anyHits) pauseTrace();
+		if (anyHits) {
+			pauseTrace();
+			breakpointsButton.setBorderPainted(true);
+		} else {
+			breakpointsButton.setBorderPainted(false);
+		}
 	}
 	
 	private void playPauseTrace() {
