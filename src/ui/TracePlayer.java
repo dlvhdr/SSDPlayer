@@ -63,6 +63,7 @@ import manager.TraceParserGeneral;
 import manager.VisualConfig;
 import manager.WorkloadGenerator;
 import ui.breakpoints.ManageBreakpointsDialog;
+import ui.breakpoints.TriggeredBreakpointsView;
 import utils.Utils;
 
 public class TracePlayer extends JPanel {
@@ -108,6 +109,7 @@ public class TracePlayer extends JPanel {
 	
 	private List<BreakpointBase> breakpoints;
 	private ManageBreakpointsDialog breakpointsDialog;
+	private TriggeredBreakpointsView triggeredBpView;
 	
     public TracePlayer(VisualConfig visualConfig, TwoObjectsCallback<Device<?, ?, ?, ?>, Iterable<StatisticsGetter>> resetDevice, OneObjectCallback<Device<?,?,?,?>> updateDevice) {
     	Utils.validateNotNull(updateDevice, "Update device callback");
@@ -418,6 +420,8 @@ public class TracePlayer extends JPanel {
 			}
 		}
 		
+		triggeredBpView.updateTriggeredBreakpoints(breakpoints);
+		
 		if (anyHits) pauseTrace();
 	}
 	
@@ -456,5 +460,9 @@ public class TracePlayer extends JPanel {
 		
 		breakpoints.clear();
 		breakpoints.addAll(breakpointsDialog.getBreakpoints());
+	}
+	
+	public void setTriggeredBreakpointsView(TriggeredBreakpointsView bpView) {
+		triggeredBpView = bpView;
 	}
 }
