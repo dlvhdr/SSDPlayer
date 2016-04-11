@@ -77,7 +77,7 @@ public class TracePlayer extends JPanel {
 	private JButton nextButton = new JButton(new ImageIcon(getClass().getResource("/ui/images/next.png")));
 	private JButton openButton = new JButton(new ImageIcon(getClass().getResource("/ui/images/eject.png")));
 	private JButton generateButton = new JButton(new ImageIcon(getClass().getResource("/ui/images/generate.png")));
-	private JButton breakpointsButton = new JButton("Breakpoints");
+	private JButton breakpointsButton = new JButton("Bp");
 	
 	private JProgressBar progressBar;
 	private TraceParser<?,?> parser;
@@ -227,6 +227,16 @@ public class TracePlayer extends JPanel {
 		addButton(generateButton, "Generate New Workload");
 		generateButton.setEnabled(true);
 		
+		breakpointsButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				showBreakpointsDialog();
+			}
+		});
+		addButton(breakpointsButton, ManageBreakpointsDialog.DIALOG_HEADER);
+		breakpointsButton.setEnabled(true);
+		breakpointsButton.setBorder(BorderFactory.createLineBorder(Consts.Colors.ACTIVE));
+		
 		playPauseButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -252,16 +262,6 @@ public class TracePlayer extends JPanel {
 			}
 		});
 		addButton(stopButton , "Stop Trace");
-		
-		breakpointsButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showBreakpointsDialog();
-			}
-		});
-		addButton(breakpointsButton, ManageBreakpointsDialog.DIALOG_HEADER);
-		breakpointsButton.setEnabled(true);
-		breakpointsButton.setBorder(BorderFactory.createLineBorder(Consts.Colors.ACTIVE));
 		
 		add(Box.createRigidArea(new Dimension(5,0)));
 	}
