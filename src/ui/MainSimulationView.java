@@ -22,6 +22,8 @@
 package ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
@@ -54,6 +56,7 @@ import general.XMLGetter;
 import general.XMLParsingException;
 import manager.SSDManager;
 import manager.VisualConfig;
+import ui.breakpoints.TriggeredBreakpointsView;
 
 public class MainSimulationView extends JFrame {
 	private static final long serialVersionUID = 251948453746299747L;
@@ -67,6 +70,8 @@ public class MainSimulationView extends JFrame {
 	private DeviceView deviceView;
 	private StatisticsView statisticsView;
 	private TracePlayer tracePlayer;
+	private JPanel triggeredBreakpointsView;
+	private JPanel southInnerPanel;
 
 	public static void main(String[] args) {
 		try {
@@ -137,10 +142,20 @@ public class MainSimulationView extends JFrame {
 		tracePlayer.setInitialBreakpoints(initialBreakpoints);
 		
 		southPanel.add(tracePlayer);
+		
+		southInnerPanel = new JPanel();
+		southInnerPanel.setLayout(new BoxLayout(southInnerPanel, BoxLayout.X_AXIS));
+		triggeredBreakpointsView = new TriggeredBreakpointsView();
+
 		statisticsPanel = new JPanel(new FlowLayout());
 		JScrollPane scrollableStatisticsPane = new JScrollPane(statisticsPanel);
 		scrollableStatisticsPane.setBorder(BorderFactory.createEmptyBorder());
-		southPanel.add(scrollableStatisticsPane);
+		
+		southInnerPanel.setBorder(BorderFactory.createLineBorder(Color.red));
+		statisticsPanel.setBorder(BorderFactory.createLineBorder(Color.pink));
+		southInnerPanel.add(scrollableStatisticsPane);
+		southInnerPanel.add(triggeredBreakpointsView);
+		southPanel.add(southInnerPanel);
 		
 		setMinimumSize(new Dimension(550, 550));
 	}
