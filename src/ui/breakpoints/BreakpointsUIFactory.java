@@ -3,20 +3,18 @@ package ui.breakpoints;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import breakpoints.BreakpointBase;
 import breakpoints.BreakpointFactory;
-import breakpoints.GCNthTimeChip;
 import breakpoints.CleanBlocksChip;
 import breakpoints.CleanBlocksDevice;
 import breakpoints.CleanBlocksPlane;
+import breakpoints.GCNthTimeChip;
 import breakpoints.GCNthTimeDevice;
+import breakpoints.GCNthTimePlane;
 import breakpoints.PagesWrittenChip;
 import breakpoints.PagesWrittenDevice;
 import breakpoints.PagesWrittenPlane;
-import breakpoints.GCNthTimePlane;
 
 public class BreakpointsUIFactory {
 	private static List<BreakpointsGroup> mGroups;

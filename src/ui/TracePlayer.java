@@ -148,7 +148,7 @@ public class TracePlayer extends JPanel {
 	public void setInitialBreakpoints(List<BreakpointBase> initialBreakpoints) {
 		breakpoints = new ArrayList<BreakpointBase>();
 		breakpoints.addAll(initialBreakpoints);
-		breakpointsDialog = new ManageBreakpointsDialog(SwingUtilities.windowForComponent(this));
+		breakpointsDialog = new ManageBreakpointsDialog(SwingUtilities.windowForComponent(this), manager);
 		breakpointsDialog.setBreakpoints(breakpoints);
 	}
 	
@@ -462,6 +462,7 @@ public class TracePlayer extends JPanel {
 	
 	private void showBreakpointsDialog() {
 		pauseTrace();
+		breakpointsDialog.setManager(manager);
 		breakpointsDialog.updateHitBreakpoints();
 		breakpointsDialog.setVisible(true);
 		
